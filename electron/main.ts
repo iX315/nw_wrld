@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, screen } from 'electron'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -26,11 +26,66 @@ process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 
 
 let win: BrowserWindow | null
 
-function createWindow() {
+const getScreenSizes = () => {
+  const primaryDisplay = screen.getPrimaryDisplay()
+  const { width, height } = primaryDisplay.workAreaSize
+  const { x, y } = primaryDisplay.workArea
+
+  return {
+    x,
+    y,
+    width,
+    height
+  }
+}
+
+function createDashboardWindow() {
+  const screenSize = getScreenSizes()
+
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    icon: path.join(process.env.VITE_PUBLIC, 'logo.png'),
+    x: screenSize.x,
+    y: screenSize.y,
+    height: screenSize.height,
+    width: Math.floor(screenSize.width / 2),
+    title: "Dashboard [NW_WRLD]",
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs')
+    }
+  })
+
+  // Test active push message to Renderer-process.
+  win.webContents.on('did-finish-load', () => {
+    win?.webContents.send('main-process-message', (new Date).toLocaleString())
+  })
+
+  if (VITE_DEV_SERVER_URL) {
+    win.loadURL(VITE_DEV_SERVER_URL)
+  } else {
+    // win.loadFile('dist/index.html')
+    win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+  }
+}
+
+function createProjectorWindow() {
+  const screenSize = getScreenSizes()
+
+  win = new BrowserWindow({
+    icon: path.join(process.env.VITE_PUBLIC, 'logo.png'),
+    frame: false,
+    title: "Projector [NW_WRLD]",
+    x: screenSize.x + Math.floor(screenSize.width / 2),
+    y: screenSize.y,
+    height: screenSize.height,
+    width: Math.floor(screenSize.width / 2),
+    show: true,
+    paintWhenInitiallyHidden: true,
+    webPreferences: {
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.mjs'),
+      backgroundThrottling: false,
+      webgl: true,
+      autoplayPolicy: "no-user-gesture-required",
     }
   })
 
@@ -61,8 +116,13 @@ app.on('activate', () => {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow()
+    createDashboardWindow()
+    createProjectorWindow()
   }
 })
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  console.log(getScreenSizes())
+  createDashboardWindow()
+  createProjectorWindow()
+})
