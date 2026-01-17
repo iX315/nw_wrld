@@ -1,8 +1,11 @@
 {
   "name": "nw_wrld",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0-reboot",
+  "description": "nw_wrld is an event-driven sequencer for triggering visuals using web technologies. It enables users to scale up audiovisual compositions for prototyping, demos, exhibitions, and live performances. Users code their own visual modules, then orchestrate them using the project's native UI composer.",
   "type": "module",
+  "author": "https://github.com/aagentah",
+  "license": "GPL-3.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build && electron-builder",
@@ -11,7 +14,8 @@
   },
   "dependencies": {
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.30.3"
   },
   "devDependencies": {
     "@ix315/eslint-config": "^1.0.1",
@@ -30,7 +34,8 @@
     "typescript": "^5.2.2",
     "vite": "^5.1.6",
     "vite-plugin-electron": "^0.28.6",
-    "vite-plugin-electron-renderer": "^0.14.5"
+    "vite-plugin-electron-renderer": "^0.14.5",
+    "vite-prerender-plugin": "^0.5.12"
   },
   "main": "dist-electron/main.js",
   "pnpm": {

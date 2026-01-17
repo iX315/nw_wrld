@@ -6,6 +6,8 @@ import path from 'node:path'
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+require('node:os')
+
 // The built directory structure
 //
 // ├─┬─┬ dist
@@ -51,7 +53,7 @@ function createDashboardWindow() {
     title: "Dashboard [NW_WRLD]",
     webPreferences: {
       preload: path.join(__dirname, 'preload.mjs')
-    }
+    },
   })
 
   // Test active push message to Renderer-process.
@@ -60,10 +62,10 @@ function createDashboardWindow() {
   })
 
   if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL)
+    win.loadURL(VITE_DEV_SERVER_URL + 'dashboard')
   } else {
     // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+    win.loadFile(path.join(RENDERER_DIST, '/dashboard/index.html'))
   }
 }
 
@@ -95,10 +97,10 @@ function createProjectorWindow() {
   })
 
   if (VITE_DEV_SERVER_URL) {
-    win.loadURL(VITE_DEV_SERVER_URL)
+    win.loadURL(VITE_DEV_SERVER_URL + 'projector')
   } else {
     // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, 'index.html'))
+    win.loadFile(path.join(RENDERER_DIST, '/projector/index.html'))
   }
 }
 
@@ -122,7 +124,6 @@ app.on('activate', () => {
 })
 
 app.whenReady().then(() => {
-  console.log(getScreenSizes())
   createDashboardWindow()
   createProjectorWindow()
 })
