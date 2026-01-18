@@ -8,13 +8,13 @@ import Projector from './routes/projector'
 
 import './app.css'
 
-interface UrlProps {url: string}
+interface UrlProps { url: string }
 
 interface AppProps extends Partial<UrlProps> {
   isBrowser?: boolean
 }
 
-export function App({url, isBrowser = true}: AppProps) {
+export function App({ url, isBrowser = true }: AppProps) {
   const AppRouter = isBrowser ? BrowserRouter : StaticRouter
 
   return (
@@ -52,6 +52,6 @@ export async function prerender(data: UrlProps) {
 
   return {
     html,
-    links: new Set(['/', '/dashboard', '/projector']),
+    links: new Set(['/', '/dashboard', '/projector'])
   }
 }
