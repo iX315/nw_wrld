@@ -15,7 +15,7 @@ importers:
         specifier: ^10.1.1
         version: 10.2.0
       jotai:
-        specifier: ^2.10.0
+        specifier: ^2.16.2
         version: 2.16.2(@babel/core@7.28.6)(@babel/template@7.28.6)(@types/react@18.3.27)(react@18.3.1)
       react:
         specifier: ^18.2.0
