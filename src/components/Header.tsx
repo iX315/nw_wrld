@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 
-export const DashboardHeader = ({children}: PropsWithChildren) => {
+export const Header = ({children}: PropsWithChildren) => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-[#101010] border-b border-neutral-800 px-6 py-4">
       <div className="flex justify-between items-center">
