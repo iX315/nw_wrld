@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("fonts/RobotoMono-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 700;
+  font-style: normal;
+  font-display: block;
+}
+
+@font-face {
+  font-family: "Roboto Mono";
+  src: url("fonts/RobotoMono-Italic-VariableFont_wght.ttf")
+    format("truetype");
+  font-weight: 100 700;
+  font-style: italic;
+  font-display: block;
+}
+
+@theme {
+  --font-roboto: "Roboto Mono", monospace;
+}
+
+body,
+html {
+  overflow: hidden;
+}
+
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
