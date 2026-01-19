@@ -1,7 +1,12 @@
 import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { StaticRouter } from 'react-router-dom/server'
+import {ProjectorWrapper} from './projector/ProjectorWrapper'
 import Dashboard from './dashboard/Dashboard'
+import ErrorBoundary from './dashboard/components/ErrorBoundary'
+
+import "./rendererPolyfills";
+import "./shared/styles/_main.css";
 
 export function App() {
   return (
@@ -10,12 +15,7 @@ export function App() {
         {/** TODO splash screen? */}
         <Route path={"/"} element={<div className='bg-black'></div>} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/projector" element={(
-          <div className='projector'>
-            <div className="drag-region"/>
-            <div className="modules" />
-          </div>
-        )} />
+        <Route path="/projector" element={<ProjectorWrapper />} />
       </Routes>
     </main>
   )
@@ -27,7 +27,9 @@ if (typeof window !== 'undefined') {
 
   const root = (
     <BrowserRouter>
-      <App />
+      <ErrorBoundary>
+        <App />
+      </ErrorBoundary>
     </BrowserRouter>
   )
   if (import.meta.env.DEV) {
@@ -37,11 +39,13 @@ if (typeof window !== 'undefined') {
   }
 }
 
-export async function prerender({url}: { url: string }) {
+export async function prerender(data: { url: string }) {
   const { renderToString } = await import('react-dom/server')
 
+  console.error(data)
+
   const html = renderToString(
-    <StaticRouter location={url}>
+    <StaticRouter location={data.url}>
       <App />
     </StaticRouter>
   )

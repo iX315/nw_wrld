@@ -31,9 +31,6 @@ import { useDashboardInputConfiguration } from "./core/hooks/useDashboardInputCo
 import { useWorkspaceModuleIntrospectionDrain } from "./core/hooks/useWorkspaceModuleIntrospectionDrain.ts";
 import { useDashboardUpdateConfig } from "./core/hooks/useDashboardUpdateConfig.ts";
 
-import "../rendererPolyfills";
-import "../shared/styles/_main.css";
-
 const Dashboard = () => {
   const [userData, setUserData] = useAtom(userDataAtom);
   const [recordingData, setRecordingData] = useAtom(recordingDataAtom);
