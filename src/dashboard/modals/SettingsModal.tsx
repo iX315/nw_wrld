@@ -345,6 +345,37 @@ export const SettingsModal = ({
       ? "external-osc"
       : "external-midi";
 
+  const MidiDeviceComp = () => {
+    const selectedMidiDeviceId = inputConfig.deviceId || (availableMidiDevices.find((d) => d.name === inputConfig.deviceName)?.id ?? "");
+    return (
+      <Select
+        id="midiDevice"
+        value={selectedMidiDeviceId}
+        onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+          const nextDeviceId = e.target.value;
+          const selected = availableMidiDevices.find(
+            (d) => d.id === nextDeviceId
+          );
+          setInputConfig({
+            ...inputConfig,
+            deviceId: nextDeviceId,
+            deviceName: selected?.name || "",
+          });
+        }}
+        className="py-1 w-full"
+      >
+        <option value="" className="bg-[#101010]">
+          Not configured
+        </option>
+        {availableMidiDevices.map((device) => (
+          <option key={device.id} value={device.id} className="bg-[#101010]">
+            {device.name}
+          </option>
+        ))}
+      </Select>
+    );
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalHeader title="SETTINGS" onClose={onClose} />
@@ -417,39 +448,7 @@ export const SettingsModal = ({
                 <>
                   <div className="pl-12">
                     <div className="opacity-50 mb-1 text-[11px]">MIDI Device:</div>
-                    {(() => {
-                      const selectedMidiDeviceId =
-                        inputConfig.deviceId ||
-                        (availableMidiDevices.find((d) => d.name === inputConfig.deviceName)?.id ??
-                          "");
-                      return (
-                        <Select
-                          id="midiDevice"
-                          value={selectedMidiDeviceId}
-                          onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                            const nextDeviceId = e.target.value;
-                            const selected = availableMidiDevices.find(
-                              (d) => d.id === nextDeviceId
-                            );
-                            setInputConfig({
-                              ...inputConfig,
-                              deviceId: nextDeviceId,
-                              deviceName: selected?.name || "",
-                            });
-                          }}
-                          className="py-1 w-full"
-                        >
-                          <option value="" className="bg-[#101010]">
-                            Not configured
-                          </option>
-                          {availableMidiDevices.map((device) => (
-                            <option key={device.id} value={device.id} className="bg-[#101010]">
-                              {device.name}
-                            </option>
-                          ))}
-                        </Select>
-                      );
-                    })()}
+                    <MidiDeviceComp />
                   </div>
 
                   <div className="pl-12">
