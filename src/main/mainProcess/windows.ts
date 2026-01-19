@@ -4,9 +4,10 @@ import * as path from "node:path";
 import InputManager from "../InputManager";
 import { DEFAULT_INPUT_CONFIG, DEFAULT_USER_DATA } from "../../shared/config/defaultConfig";
 import { sanitizeJsonForBridge } from "../../shared/validation/jsonBridgeValidation";
-import { srcDir, state } from "./state";
+import { state } from "./state";
 import { getProjectJsonDirForMain, startWorkspaceWatcher } from "./workspace";
 import { destroySandboxView, updateSandboxViewBounds } from "./sandbox";
+import { RENDERER_DIST, VITE_DEV_SERVER_URL } from "../..";
 
 type WebContentsWithId = { id?: unknown };
 type SenderEvent = { sender?: WebContentsWithId };
@@ -268,7 +269,7 @@ export function createWindow(projectDir: string | null): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(srcDir, "..", "dist", "runtime", "preload.js"),
+      preload: path.join(__dirname, "preload.mjs"),
       enableRemoteModule: false,
       backgroundThrottling: false,
       webgl: true,
@@ -308,9 +309,13 @@ export function createWindow(projectDir: string | null): void {
     }
   } catch {}
 
-  (state.projector1Window as BrowserWindow).loadFile(
-    path.join(srcDir, "projector", "views", "projector.html")
-  );
+  if (VITE_DEV_SERVER_URL) {
+    (state.projector1Window as BrowserWindow).loadURL(VITE_DEV_SERVER_URL + 'projector')
+  } else {
+    (state.projector1Window as BrowserWindow).loadFile(
+      path.join(RENDERER_DIST, '/projector/index.html')
+    )
+  }
   (state.projector1Window as BrowserWindow).on("resize", () => {
     updateSandboxViewBounds();
   });
@@ -324,7 +329,7 @@ export function createWindow(projectDir: string | null): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(srcDir, "..", "dist", "runtime", "preload.js"),
+      preload: path.join(__dirname, "preload.mjs"),
       enableHardwareAcceleration: true,
       backgroundThrottling: false,
       additionalArguments: additionalArgs,
@@ -370,9 +375,13 @@ export function createWindow(projectDir: string | null): void {
     }
   } catch {}
 
-  (state.dashboardWindow as BrowserWindow).loadFile(
-    path.join(srcDir, "dashboard", "views", "dashboard.html")
-  );
+  if (VITE_DEV_SERVER_URL) {
+    (state.dashboardWindow as BrowserWindow).loadURL(VITE_DEV_SERVER_URL + 'dashboard')
+  } else {
+    (state.dashboardWindow as BrowserWindow).loadFile(
+      path.join(RENDERER_DIST, '/dashboard/index.html')
+    )
+  }
 
   (state.dashboardWindow as BrowserWindow).webContents.once("did-finish-load", () => {
     const fullConfig = loadConfig(projectDir) as { config?: unknown };
