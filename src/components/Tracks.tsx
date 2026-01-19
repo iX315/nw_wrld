@@ -1,8 +1,10 @@
 import { PropsWithChildren } from "react"
+import { TrackItem } from "./TrackItem"
 
 type Track = {
   id: string
   active: boolean
+  modules: []
 }
 
 interface TracksProps {
@@ -33,10 +35,8 @@ export const Tracks = ({tracks = []}: TracksProps) => {
       <div className="flex flex-col gap-8 px-8">
         {tracks
           .filter((track) => track.active)
-          .map(({id}) => (
-            <div key={id}>
-              track id: {id}
-            </div>
+          .map((props) => (
+            <TrackItem {...props} />
           ))}
       </div>
     </Container>
