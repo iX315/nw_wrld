@@ -40,6 +40,11 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
               An error occurred in the Dashboard component.
             </div>
             <div className="text-xs text-neutral-600">Check the console for details.</div>
+            {process.env.NODE_ENV === 'development' ? (
+              <pre className="text-[12px] font-mono whitespace-pre-wrap text-left">
+                {JSON.stringify(this.state.errorInfo)}
+              </pre>
+            ) : null}
             <button
               onClick={() => window.location.reload()}
               className="mt-6 px-4 py-2 bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-sm rounded"
