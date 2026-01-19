@@ -24,6 +24,7 @@ module.exports = {
   },
   ignorePatterns: [
     "dist/",
+    "dist-electron/",
     "release/",
     "build/",
     "node_modules/",

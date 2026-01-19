@@ -4,6 +4,7 @@ node_modules/
 
 # Build outputs
 dist/
+dist-electron/
 out/
 
 # electron-builder "build resources" (we keep only icon assets tracked)
