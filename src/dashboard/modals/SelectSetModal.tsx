@@ -12,6 +12,7 @@ import { EditSetModal } from "./EditSetModal";
 import { ConfirmationModal } from "./ConfirmationModal";
 import { deleteRecordingsForTracks } from "../../shared/json/recordingUtils.ts";
 
+// TODO Set exist already in es2015.iterable - better rename it
 type Set = {
   id: string;
   name: string;
