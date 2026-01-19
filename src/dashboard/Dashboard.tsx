@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { createRoot } from "react-dom/client";
 import { useAtom } from "jotai";
 import { getActiveSetTracks } from "../shared/utils/setUtils.ts";
-import { useIPCSend, useIPCInvoke } from "./core/hooks/useIPC";
-import { useLatestRef } from "./core/hooks/useLatestRef";
+import { useIPCSend, useIPCInvoke } from "./core/hooks/useIPC.ts";
+import { useLatestRef } from "./core/hooks/useLatestRef.ts";
 import {
   userDataAtom,
   recordingDataAtom,
@@ -14,24 +13,26 @@ import {
   recordingStateAtom,
   useFlashingChannels,
 } from "./core/state.ts";
-import { DashboardHeader } from "./components/DashboardHeader";
-import { DashboardFooter } from "./components/DashboardFooter";
-import { DashboardBody } from "./components/DashboardBody";
-import { DashboardModalLayer } from "./components/DashboardModalLayer";
-import { WorkspaceGateModal } from "./components/WorkspaceGateModal";
+import { DashboardHeader } from "./components/DashboardHeader.tsx";
+import { DashboardFooter } from "./components/DashboardFooter.tsx";
+import { DashboardBody } from "./components/DashboardBody.tsx";
+import { DashboardModalLayer } from "./components/DashboardModalLayer.tsx";
+import { WorkspaceGateModal } from "./components/WorkspaceGateModal.tsx";
 import { useWorkspaceModules } from "./core/hooks/useWorkspaceModules.ts";
-import { useInputEvents } from "./core/hooks/useInputEvents";
-import { useModuleIntrospection } from "./core/hooks/useModuleIntrospection";
-import { useProjectorPerfStats } from "./core/hooks/useProjectorPerfStats";
-import { useDashboardPlayback } from "./core/hooks/useDashboardPlayback";
-import { useDashboardBootstrap } from "./core/hooks/useDashboardBootstrap";
-import { useDashboardPersistence } from "./core/hooks/useDashboardPersistence";
-import { useDashboardUiState } from "./core/hooks/useDashboardUiState";
-import { useDashboardProjectorSettings } from "./core/hooks/useDashboardProjectorSettings";
-import { useDashboardInputConfiguration } from "./core/hooks/useDashboardInputConfiguration";
-import { useWorkspaceModuleIntrospectionDrain } from "./core/hooks/useWorkspaceModuleIntrospectionDrain";
-import { useDashboardUpdateConfig } from "./core/hooks/useDashboardUpdateConfig";
-import ErrorBoundary from "./components/ErrorBoundary";
+import { useInputEvents } from "./core/hooks/useInputEvents.ts";
+import { useModuleIntrospection } from "./core/hooks/useModuleIntrospection.ts";
+import { useProjectorPerfStats } from "./core/hooks/useProjectorPerfStats.ts";
+import { useDashboardPlayback } from "./core/hooks/useDashboardPlayback.ts";
+import { useDashboardBootstrap } from "./core/hooks/useDashboardBootstrap.ts";
+import { useDashboardPersistence } from "./core/hooks/useDashboardPersistence.ts";
+import { useDashboardUiState } from "./core/hooks/useDashboardUiState.ts";
+import { useDashboardProjectorSettings } from "./core/hooks/useDashboardProjectorSettings.ts";
+import { useDashboardInputConfiguration } from "./core/hooks/useDashboardInputConfiguration.ts";
+import { useWorkspaceModuleIntrospectionDrain } from "./core/hooks/useWorkspaceModuleIntrospectionDrain.ts";
+import { useDashboardUpdateConfig } from "./core/hooks/useDashboardUpdateConfig.ts";
+
+import "../rendererPolyfills";
+import "../shared/styles/_main.css";
 
 const Dashboard = () => {
   const [userData, setUserData] = useAtom(userDataAtom);
@@ -108,11 +109,11 @@ const Dashboard = () => {
   const userDataRef = useLatestRef(userData);
   const recordingDataRef = useLatestRef(recordingData);
 
-  const activeTrackIdRef = useRef(activeTrackId);
+  const activeTrackIdRef = useRef(String(activeTrackId));
   const activeSetIdRef = useRef(activeSetId);
   const workspacePathRef = useRef(null);
   useEffect(() => {
-    activeTrackIdRef.current = activeTrackId;
+    activeTrackIdRef.current = String(activeTrackId);
     activeSetIdRef.current = activeSetId;
     workspacePathRef.current = workspacePath;
   }, [activeTrackId, activeSetId, workspacePath]);
@@ -227,11 +228,13 @@ const Dashboard = () => {
     isInitialMountRef: isInitialMount,
     userDataLoadedSuccessfullyRef: userDataLoadedSuccessfully,
     workspacePathRef,
-    setUserData,
+    // FIXME avoid props drilling! - type override temporary
+    setUserData: setUserData as any,
     setRecordingData,
     setActiveTrackId,
     setActiveSetId,
-    setInputConfig,
+    // FIXME avoid props drilling! - type override temporary
+    setInputConfig: setInputConfig as any,
     setIsSequencerMuted,
     setWorkspacePath,
     setWorkspaceModalMode,
@@ -272,7 +275,8 @@ const Dashboard = () => {
     firstVisibleTrack,
     recordingData,
     recordingDataRef,
-    setRecordingData,
+    // FIXME avoid props drilling! - type override temporary
+    setRecordingData: setRecordingData as any,
     sendToProjector,
     flashChannel,
     setFlashingConstructors,
@@ -282,7 +286,8 @@ const Dashboard = () => {
   });
 
   const updateConfig = useDashboardUpdateConfig({
-    setUserData,
+    // FIXME avoid props drilling! - type override temporary
+    setUserData: setUserData as any,
     userDataConfig: userData.config,
     isSequencerPlaying,
     sequencerEngineRef,
@@ -365,7 +370,8 @@ const Dashboard = () => {
         setIsManageModulesModalOpen={setIsManageModulesModalOpen}
         isDebugOverlayOpen={isDebugOverlayOpen}
         setIsDebugOverlayOpen={setIsDebugOverlayOpen}
-        userData={userData}
+        // FIXME avoid props drilling! - type override temporary
+        userData={userData as any}
         setUserData={setUserData}
         recordingData={recordingData}
         setRecordingData={setRecordingData}
@@ -374,7 +380,8 @@ const Dashboard = () => {
         activeSetId={activeSetId}
         setActiveSetId={setActiveSetId}
         inputConfig={inputConfig}
-        setInputConfig={setInputConfig}
+        // FIXME avoid props drilling! - type override temporary
+        setInputConfig={setInputConfig as (config: Record<string, unknown>) => void}
         availableMidiDevices={availableMidiDevices}
         settings={settings}
         aspectRatio={aspectRatio}
@@ -423,14 +430,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-const rootElement = document.getElementById("dashboard") || document.getElementById("root");
-if (rootElement) {
-  createRoot(rootElement).render(
-    <ErrorBoundary>
-      <Dashboard />
-    </ErrorBoundary>
-  );
-}
 
 export default Dashboard;
