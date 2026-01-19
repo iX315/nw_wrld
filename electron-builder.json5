@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "tech.aagentah.nw_wrld",
+  "productName": "nw_wrld",
+  "asar": true,
+  "npmRebuild": false,
+  "directories": {
+    "output": "release/${version}",
+    "buildResources": "build"
+  },
+  "files": [
+    "dist",
+    "dist-electron"
+  ],
+  "mac": {
+    "target": [
+      "dmg"
+    ],
+    "icon": "build/logo.icns",
+    "hardenedRuntime": true,
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.inherit.plist",
+    "notarize": true
+  },
+  "win": {
+    "target": [
+      "portable"
+    ],
+    "icon": "build/logo.ico"
+  }
+}
