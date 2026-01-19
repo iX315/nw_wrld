@@ -1,17 +1,4 @@
-type ElectronApp = {
-  on(event: "before-quit", handler: (event: { preventDefault(): void }) => void): void;
-  on(event: "activate", handler: () => void): void;
-  quit(): void;
-};
-
-type ElectronBrowserWindowStatic = {
-  getAllWindows(): unknown[];
-};
-
-const { app, BrowserWindow } = require("electron") as {
-  app: ElectronApp;
-  BrowserWindow: ElectronBrowserWindowStatic;
-};
+import { app, BrowserWindow } from "electron"
 
 import { state } from "./state";
 

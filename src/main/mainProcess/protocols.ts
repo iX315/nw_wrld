@@ -1,25 +1,8 @@
+import { app, protocol, nativeImage } from "electron"
 import * as path from "node:path";
 
 import { state, srcDir } from "./state";
 import { isExistingDirectory, resolveWithinDir } from "./pathSafety";
-
-type ElectronApp = { isPackaged: boolean; dock: { setIcon(icon: unknown): void } };
-type ElectronProtocol = {
-  registerFileProtocol(
-    scheme: string,
-    handler: (
-      request: { url: string },
-      callback: (response: { path?: string; error?: number }) => void
-    ) => void
-  ): void;
-};
-type ElectronNativeImage = { createFromPath(p: string): { isEmpty(): boolean } };
-
-const { app, protocol, nativeImage } = require("electron") as {
-  app: ElectronApp;
-  protocol: ElectronProtocol;
-  nativeImage: ElectronNativeImage;
-};
 
 export function registerProtocols() {
   try {
