@@ -12,10 +12,6 @@ export default defineConfig(() => {
   rmSync(path.join(__dirname, 'dist-electron'), { recursive: true, force: true })
 
   return {
-    define: {
-      'import.meta.env.PACKAGE_VERSION': JSON.stringify(packageJson.version),
-      'import.meta.env.REPO_URL': JSON.stringify(packageJson.repository.url),
-    },
     plugins: [
       react(),
       tailwindcss(),
@@ -23,6 +19,12 @@ export default defineConfig(() => {
         main: {
           // Shortcut of `build.lib.entry`.
           entry: 'src/index.ts',
+          vite: {
+            define: {
+              'import.meta.env.PACKAGE_VERSION': JSON.stringify(packageJson.version),
+              'import.meta.env.REPO_URL': JSON.stringify(packageJson.repository.url),
+            }
+          },
           onstart(options) {
             // fix linux devtools
             // https://github.com/electron-vite/vite-plugin-electron/issues/264
@@ -53,6 +55,7 @@ export default defineConfig(() => {
           main: path.join(__dirname, 'html/dashboard.html'),
           projector: path.join(__dirname, 'html/projector.html'),
           moduleSandbox: path.join(__dirname, 'html/moduleSandbox.html'),
+          sandboxPreload: path.join(__dirname, 'src/sandboxPreload.ts'),
         },
       },
     },
