@@ -10,7 +10,7 @@ import { ensureWorkspaceStarterAssets } from "../workspaceStarterAssets";
 const getLegacyJsonDirForMain = () =>
   path.join(process.env.APP_ROOT, "..", "src", "shared", "json");
 
-const getFallbackJsonDirForMain = () => path.join(process.env.APP_ROOT, "shared", "json");
+const getFallbackJsonDirForMain = () => path.join(process.env.APP_ROOT, "src", "shared", "json");
 
 export const getProjectJsonDirForMain = (projectDir: string | null) => {
   if (!projectDir || typeof projectDir !== "string") return null;

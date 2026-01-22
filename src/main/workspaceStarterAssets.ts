@@ -29,7 +29,7 @@ export function ensureWorkspaceStarterAssets(workspacePath: string) {
   ensureDir(modelsDir);
   ensureDir(fontsDir);
 
-  const srcAssetsDir = path.join(process.env.APP_ROOT, "assets");
+  const srcAssetsDir = path.join(process.env.APP_ROOT, "src", "assets");
   safeCopyIfMissing(
     path.join(srcAssetsDir, "json", "meteor.json"),
     path.join(jsonDir, "meteor.json")

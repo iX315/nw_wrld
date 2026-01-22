@@ -14,8 +14,8 @@ export function registerProtocols() {
           [
             "/moduleSandbox.html",
             app.isPackaged
-              ? path.join(process.env.APP_ROOT, "projector", "views", "moduleSandbox.prod.html")
-              : path.join(process.env.APP_ROOT, "projector", "views", "moduleSandbox.html"),
+              ? path.join(process.env.APP_ROOT, "src", "projector", "views", "moduleSandbox.prod.html")
+              : path.join(process.env.APP_ROOT, "src", "projector", "views", "moduleSandbox.html"),
           ],
           ["/moduleSandbox.js", path.join(process.env.APP_ROOT, "..", "dist", "moduleSandbox.js")],
           ["/moduleSandbox.js.map", path.join(process.env.APP_ROOT, "..", "dist", "moduleSandbox.js.map")],

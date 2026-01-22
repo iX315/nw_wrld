@@ -13,8 +13,8 @@ import { getProjectDirForEvent, type SenderEvent } from "./projectContext";
 export function registerAppBridge(): void {
   ipcMain.on("bridge:app:getBaseMethodNames", (event) => {
     try {
-      const moduleBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "moduleBase.ts");
-      const threeBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "threeBase.ts");
+      const moduleBasePath = path.join(process.env.APP_ROOT, "src", "projector", "helpers", "moduleBase.ts");
+      const threeBasePath = path.join(process.env.APP_ROOT, "src", "projector", "helpers", "threeBase.ts");
       const moduleBaseContent = fs.readFileSync(moduleBasePath, "utf-8");
       const threeBaseContent = fs.readFileSync(threeBasePath, "utf-8");
       const methodRegex = /{\s*name:\s*"([^"]+)",\s*executeOnLoad:/g;
@@ -78,8 +78,8 @@ export function registerAppBridge(): void {
       const safeMethodName = normalized.methodName;
       const methodNameEscaped = escapeRegExpLiteral(safeMethodName);
 
-      const moduleBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "moduleBase.ts");
-      const threeBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "threeBase.ts");
+      const moduleBasePath = path.join(process.env.APP_ROOT, "src", "projector", "helpers", "moduleBase.ts");
+      const threeBasePath = path.join(process.env.APP_ROOT, "src", "projector", "helpers", "threeBase.ts");
 
       let filePath: string | null = null;
       let fileContent: string | null = null;
@@ -174,7 +174,7 @@ export function registerAppBridge(): void {
 
   ipcMain.on("bridge:app:getKickMp3ArrayBuffer", (event) => {
     try {
-      const kickPath = path.join(process.env.APP_ROOT, "dashboard", "assets", "audio", "kick.mp3");
+      const kickPath = path.join(process.env.APP_ROOT, "src", "dashboard", "assets", "audio", "kick.mp3");
       const buf = fs.readFileSync(kickPath);
       event.returnValue = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
     } catch {

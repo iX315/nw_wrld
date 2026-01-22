@@ -8,6 +8,7 @@ import {
   normalizeSandboxResult,
 } from "../../shared/validation/sandboxValidation";
 import { normalizeSandboxPerfStats } from "../../shared/validation/perfValidation";
+import { MAIN_DIST } from "../..";
 
 type WebContentsWithId = { id?: unknown; once?: unknown };
 type SenderEvent = { sender?: WebContentsWithId };
@@ -200,7 +201,7 @@ const ensureSandboxView = (projectDir: string | null): unknown | null => {
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true,
-      preload: path.join(process.env.APP_ROOT, "..", "dist", "runtime", "sandboxPreload.js"),
+      preload: path.join(MAIN_DIST, "sandboxPreload.js"),
       enableRemoteModule: false,
       backgroundThrottling: false,
       webgl: true,
