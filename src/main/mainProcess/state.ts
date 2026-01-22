@@ -13,9 +13,6 @@ type PendingSandboxRequestEntry = {
   token: string;
 };
 
-/** @deprecated use process.env.APP_ROOT instead */
-export const srcDir = path.resolve(__dirname, "..", "..", "..", "..", "src");
-
 export const state: {
   projector1Window: unknown | null;
   dashboardWindow: unknown | null;

@@ -1,9 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-
-import { srcDir } from "./mainProcess/state";
-
-const STARTER_MODULES_DIR = path.join(srcDir, "main", "starter_modules");
+import { STARTER_MODULES_DIR } from "..";
 
 export function ensureWorkspaceStarterModules(modulesDir: string) {
   if (!modulesDir || typeof modulesDir !== "string") return;

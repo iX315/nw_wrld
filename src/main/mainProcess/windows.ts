@@ -7,7 +7,7 @@ import { sanitizeJsonForBridge } from "../../shared/validation/jsonBridgeValidat
 import { state } from "./state";
 import { getProjectJsonDirForMain, startWorkspaceWatcher } from "./workspace";
 import { destroySandboxView, updateSandboxViewBounds } from "./sandbox";
-import { RENDERER_DIST, VITE_DEV_SERVER_URL } from "../..";
+import { MAIN_DIST, RENDERER_DIST, VITE_DEV_SERVER_URL } from "../..";
 
 type WebContentsWithId = { id?: unknown };
 type SenderEvent = { sender?: WebContentsWithId };
@@ -269,7 +269,7 @@ export function createWindow(projectDir: string | null): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.mjs"),
+      preload: path.join(MAIN_DIST, "preload.mjs"),
       enableRemoteModule: false,
       backgroundThrottling: false,
       webgl: true,
@@ -310,10 +310,10 @@ export function createWindow(projectDir: string | null): void {
   } catch {}
 
   if (VITE_DEV_SERVER_URL) {
-    (state.projector1Window as BrowserWindow).loadURL(VITE_DEV_SERVER_URL + 'projector')
+    (state.projector1Window as BrowserWindow).loadURL(path.posix.join(VITE_DEV_SERVER_URL, 'html', 'projector.html'))
   } else {
     (state.projector1Window as BrowserWindow).loadFile(
-      path.join(RENDERER_DIST, '/projector/index.html')
+      path.join(RENDERER_DIST, '/html/projector.html')
     )
   }
   (state.projector1Window as BrowserWindow).on("resize", () => {
@@ -329,7 +329,7 @@ export function createWindow(projectDir: string | null): void {
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.mjs"),
+      preload: path.join(MAIN_DIST, "preload.mjs"),
       enableHardwareAcceleration: true,
       backgroundThrottling: false,
       additionalArguments: additionalArgs,
@@ -376,10 +376,10 @@ export function createWindow(projectDir: string | null): void {
   } catch {}
 
   if (VITE_DEV_SERVER_URL) {
-    (state.dashboardWindow as BrowserWindow).loadURL(VITE_DEV_SERVER_URL + 'dashboard')
+    (state.dashboardWindow as BrowserWindow).loadURL(path.posix.join(VITE_DEV_SERVER_URL, 'html', 'dashboard.html'))
   } else {
     (state.dashboardWindow as BrowserWindow).loadFile(
-      path.join(RENDERER_DIST, '/dashboard/index.html')
+      path.join(RENDERER_DIST, '/html/dashboard.html')
     )
   }
 

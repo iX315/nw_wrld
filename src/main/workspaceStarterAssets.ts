@@ -1,8 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { srcDir } from "./mainProcess/state";
-
 const ensureDir = (dirPath: string) => {
   try {
     fs.mkdirSync(dirPath, { recursive: true });
@@ -31,7 +29,7 @@ export function ensureWorkspaceStarterAssets(workspacePath: string) {
   ensureDir(modelsDir);
   ensureDir(fontsDir);
 
-  const srcAssetsDir = path.join(srcDir, "assets");
+  const srcAssetsDir = path.join(process.env.APP_ROOT, "assets");
   safeCopyIfMissing(
     path.join(srcAssetsDir, "json", "meteor.json"),
     path.join(jsonDir, "meteor.json")

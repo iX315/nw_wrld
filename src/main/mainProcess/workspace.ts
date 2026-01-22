@@ -2,15 +2,15 @@ import { ipcMain, dialog } from "electron"
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { state, srcDir } from "./state";
+import { state } from "./state";
 import { isExistingDirectory } from "./pathSafety";
 import { ensureWorkspaceStarterModules } from "../workspaceStarterModules";
 import { ensureWorkspaceStarterAssets } from "../workspaceStarterAssets";
 
 const getLegacyJsonDirForMain = () =>
-  path.join(srcDir, "..", "src", "shared", "json");
+  path.join(process.env.APP_ROOT, "..", "src", "shared", "json");
 
-const getFallbackJsonDirForMain = () => path.join(srcDir, "shared", "json");
+const getFallbackJsonDirForMain = () => path.join(process.env.APP_ROOT, "shared", "json");
 
 export const getProjectJsonDirForMain = (projectDir: string | null) => {
   if (!projectDir || typeof projectDir !== "string") return null;
@@ -331,7 +331,7 @@ export const ensureWorkspaceScaffold = async (workspacePath: string | null) => {
   const moduleDevGuidePath = path.join(workspacePath, "MODULE_DEVELOPMENT.md");
   if (!fs.existsSync(moduleDevGuidePath)) {
     try {
-      const sourcePath = path.join(srcDir, "..", "MODULE_DEVELOPMENT.md");
+      const sourcePath = path.join(process.env.APP_ROOT, "..", "MODULE_DEVELOPMENT.md");
       if (fs.existsSync(sourcePath)) {
         fs.copyFileSync(sourcePath, moduleDevGuidePath);
       }

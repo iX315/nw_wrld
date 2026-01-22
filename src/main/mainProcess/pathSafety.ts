@@ -100,9 +100,7 @@ const safeJsonFilenameFallback = (filename: unknown) => {
 
 let runtime: RuntimeValidation | null = null;
 try {
-  runtime = require(
-    path.join(__dirname, "..", "..", "shared", "validation", "pathSafetyValidation.js")
-  ) as RuntimeValidation;
+  // runtime = require(path.join(process.env.APP_ROOT, "..", "..", "shared", "validation", "pathSafetyValidation.js")) as RuntimeValidation;
 } catch {}
 
 export const isExistingDirectory =

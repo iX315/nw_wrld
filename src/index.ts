@@ -1,11 +1,10 @@
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { createRequire } from "node:module"
+import { start } from "./main/mainProcess/entry"
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-
-import { start } from "./main/mainProcess/entry"
 
 require('node:os')
 
@@ -25,6 +24,7 @@ process.env.APP_ROOT = path.join(__dirname, '..')
 export const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 export const MAIN_DIST = path.join(process.env.APP_ROOT, 'dist-electron')
 export const RENDERER_DIST = path.join(process.env.APP_ROOT, 'dist')
+export const STARTER_MODULES_DIR = path.join(process.env.APP_ROOT, "main", "starter_modules")
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, 'public') : RENDERER_DIST
 

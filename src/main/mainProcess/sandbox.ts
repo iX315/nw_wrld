@@ -1,7 +1,7 @@
 import { BrowserView, ipcMain } from "electron";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { srcDir, state } from "./state";
+import { state } from "./state";
 import { isExistingDirectory, resolveWithinDir } from "./pathSafety";
 import {
   normalizeSandboxRequestProps,
@@ -200,7 +200,7 @@ const ensureSandboxView = (projectDir: string | null): unknown | null => {
       nodeIntegration: false,
       contextIsolation: true,
       sandbox: true,
-      preload: path.join(srcDir, "..", "dist", "runtime", "sandboxPreload.js"),
+      preload: path.join(process.env.APP_ROOT, "..", "dist", "runtime", "sandboxPreload.js"),
       enableRemoteModule: false,
       backgroundThrottling: false,
       webgl: true,

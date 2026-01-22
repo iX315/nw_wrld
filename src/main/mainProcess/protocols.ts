@@ -1,7 +1,7 @@
 import { app, protocol, nativeImage } from "electron"
 import * as path from "node:path";
 
-import { state, srcDir } from "./state";
+import { state } from "./state";
 import { isExistingDirectory, resolveWithinDir } from "./pathSafety";
 
 export function registerProtocols() {
@@ -14,11 +14,11 @@ export function registerProtocols() {
           [
             "/moduleSandbox.html",
             app.isPackaged
-              ? path.join(srcDir, "projector", "views", "moduleSandbox.prod.html")
-              : path.join(srcDir, "projector", "views", "moduleSandbox.html"),
+              ? path.join(process.env.APP_ROOT, "projector", "views", "moduleSandbox.prod.html")
+              : path.join(process.env.APP_ROOT, "projector", "views", "moduleSandbox.html"),
           ],
-          ["/moduleSandbox.js", path.join(srcDir, "..", "dist", "moduleSandbox.js")],
-          ["/moduleSandbox.js.map", path.join(srcDir, "..", "dist", "moduleSandbox.js.map")],
+          ["/moduleSandbox.js", path.join(process.env.APP_ROOT, "..", "dist", "moduleSandbox.js")],
+          ["/moduleSandbox.js.map", path.join(process.env.APP_ROOT, "..", "dist", "moduleSandbox.js.map")],
         ]);
 
         const filePath = allowed.get(pathname);
@@ -74,7 +74,7 @@ export function registerProtocols() {
 
   if (process.platform === "darwin" && !app.isPackaged) {
     try {
-      const iconPath = path.join(srcDir, "assets", "images", "blueprint.png");
+      const iconPath = path.join(process.env.APP_ROOT, "assets", "images", "blueprint.png");
       const icon = nativeImage.createFromPath(iconPath);
       if (!icon.isEmpty()) {
         app.dock.setIcon(icon);

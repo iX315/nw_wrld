@@ -2,7 +2,7 @@ import { app, ipcMain } from "electron";
 import * as fs from "node:fs";
 import * as path from "node:path";
 
-import { srcDir, state } from "../state";
+import { state } from "../state";
 import { safeModuleName, isExistingDirectory, resolveWithinDir } from "../pathSafety";
 import {
   escapeRegExpLiteral,
@@ -13,8 +13,8 @@ import { getProjectDirForEvent, type SenderEvent } from "./projectContext";
 export function registerAppBridge(): void {
   ipcMain.on("bridge:app:getBaseMethodNames", (event) => {
     try {
-      const moduleBasePath = path.join(srcDir, "projector", "helpers", "moduleBase.ts");
-      const threeBasePath = path.join(srcDir, "projector", "helpers", "threeBase.ts");
+      const moduleBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "moduleBase.ts");
+      const threeBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "threeBase.ts");
       const moduleBaseContent = fs.readFileSync(moduleBasePath, "utf-8");
       const threeBaseContent = fs.readFileSync(threeBasePath, "utf-8");
       const methodRegex = /{\s*name:\s*"([^"]+)",\s*executeOnLoad:/g;
@@ -39,35 +39,7 @@ export function registerAppBridge(): void {
 
   ipcMain.on("bridge:app:getVersion", (event) => {
     try {
-      const tryReadVersion = (p: string): string | null => {
-        try {
-          if (!p || typeof p !== "string") return null;
-          if (!fs.existsSync(p)) return null;
-          const raw = fs.readFileSync(p, "utf-8");
-          const pkg = JSON.parse(raw) as unknown;
-          const v =
-            pkg && typeof pkg === "object" && "version" in pkg
-              ? (pkg as { version?: unknown }).version
-              : null;
-          return typeof v === "string" && v.trim() ? v.trim() : null;
-        } catch {
-          return null;
-        }
-      };
-
-      const fromAppPath = tryReadVersion(path.join(app.getAppPath(), "package.json"));
-      if (fromAppPath) {
-        event.returnValue = fromAppPath;
-        return;
-      }
-
-      const fromProjectRoot = tryReadVersion(path.join(srcDir, "..", "package.json"));
-      if (fromProjectRoot) {
-        event.returnValue = fromProjectRoot;
-        return;
-      }
-
-      event.returnValue = app.getVersion();
+      event.returnValue = import.meta.env.PACKAGE_VERSION;
     } catch {
       event.returnValue = null;
     }
@@ -75,36 +47,7 @@ export function registerAppBridge(): void {
 
   ipcMain.on("bridge:app:getRepositoryUrl", (event) => {
     try {
-      const tryRead = (p: string): string | null => {
-        try {
-          if (!p || typeof p !== "string") return null;
-          if (!fs.existsSync(p)) return null;
-          const raw = fs.readFileSync(p, "utf-8");
-          const pkg = JSON.parse(raw) as unknown;
-          const repo =
-            pkg && typeof pkg === "object" && "repository" in pkg
-              ? (pkg as { repository?: unknown }).repository
-              : null;
-          const url =
-            typeof repo === "string"
-              ? repo
-              : repo && typeof repo === "object" && "url" in repo
-                ? (repo as { url?: unknown }).url
-                : null;
-          return typeof url === "string" ? url : null;
-        } catch {
-          return null;
-        }
-      };
-
-      const fromAppPath = tryRead(path.join(app.getAppPath(), "package.json"));
-      if (fromAppPath) {
-        event.returnValue = fromAppPath;
-        return;
-      }
-
-      const fromSrcDir = tryRead(path.join(srcDir, "..", "package.json"));
-      event.returnValue = fromSrcDir || null;
+      event.returnValue = import.meta.env.REPO_URL;
     } catch {
       event.returnValue = null;
     }
@@ -135,8 +78,8 @@ export function registerAppBridge(): void {
       const safeMethodName = normalized.methodName;
       const methodNameEscaped = escapeRegExpLiteral(safeMethodName);
 
-      const moduleBasePath = path.join(srcDir, "projector", "helpers", "moduleBase.ts");
-      const threeBasePath = path.join(srcDir, "projector", "helpers", "threeBase.ts");
+      const moduleBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "moduleBase.ts");
+      const threeBasePath = path.join(process.env.APP_ROOT, "projector", "helpers", "threeBase.ts");
 
       let filePath: string | null = null;
       let fileContent: string | null = null;
@@ -231,7 +174,7 @@ export function registerAppBridge(): void {
 
   ipcMain.on("bridge:app:getKickMp3ArrayBuffer", (event) => {
     try {
-      const kickPath = path.join(srcDir, "dashboard", "assets", "audio", "kick.mp3");
+      const kickPath = path.join(process.env.APP_ROOT, "dashboard", "assets", "audio", "kick.mp3");
       const buf = fs.readFileSync(kickPath);
       event.returnValue = buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
     } catch {
