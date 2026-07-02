@@ -10,33 +10,31 @@ import './app.css'
 
 interface UrlProps { url: string }
 
-interface AppProps extends Partial<UrlProps> {
-  isBrowser?: boolean
-}
-
-export function App({ url, isBrowser = true }: AppProps) {
-  const AppRouter = isBrowser ? BrowserRouter : StaticRouter
-
+export function App() {
   return (
-    <AppRouter location={url as string}>
-      <main>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/projector" element={<Projector />} />
-        </Routes>
-      </main>
-    </AppRouter>
+    <main>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/projector" element={<Projector />} />
+      </Routes>
+    </main>
   )
 }
 
 if (typeof window !== 'undefined') {
   const target = document.getElementById('root')
   if (!target) throw new Error('No root container found')
+
+  const root = (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  )
   if (import.meta.env.DEV) {
-    createRoot(target).render(<App />)
+    createRoot(target).render(root)
   } else {
-    hydrateRoot(target, <App />)
+    hydrateRoot(target, root)
   }
 
   // Use contextBridge
@@ -45,10 +43,14 @@ if (typeof window !== 'undefined') {
   })
 }
 
-export async function prerender(data: UrlProps) {
+export async function prerender({url}: UrlProps) {
   const { renderToString } = await import('react-dom/server')
 
-  const html = renderToString(<App isBrowser={false} {...data} />)
+  const html = renderToString(
+    <StaticRouter location={url}>
+      <App />
+    </StaticRouter>
+  )
 
   return {
     html,
